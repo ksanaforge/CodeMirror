@@ -163,6 +163,11 @@
     cm.operation(function() {
     	var milestones=[];
       for (var cursor = getSearchCursor(cm, query); cursor.findNext();) {
+
+        var marks=cm.getDoc().findMarks( cursor.from(), cursor.to());
+
+        if (marks.length) continue;
+
       	query.lastIndex=0;
     		var match=query.exec(cm.getRange(cursor.from(), cursor.to()));
         var replaceto=text.replace(/\$(\d)/g, function(_, i) {return match[i];});
