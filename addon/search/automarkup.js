@@ -190,7 +190,7 @@
   var errormessage=function(cm,msg){
   	cm.openNotification("<span style='color:red'>"+msg+"</span>",{duration:1000});
   }
-  function automarkup(cm, all) {
+  function text2markup(cm, all) {
   	
     if (cm.getOption("readOnly")) return;
     var query = cm.getSelection() || getSearchState(cm).lastQuery;
@@ -203,5 +203,31 @@
 
     });
   }
-  CodeMirror.commands.automarkup = automarkup;
+  function text2markup(cm, all) {
+    
+    if (cm.getOption("readOnly")) return;
+    var query = cm.getSelection() || getSearchState(cm).lastQuery;
+    var typename="milestone";
+    var dialogText = "Automark milestone:"
+    dialog(cm, dialogText + replaceQueryDialog, dialogText, query,function(query) {
+      query=new RegExp(query,"g");
+      if (query.source.indexOf("(")==-1) return errormessage(cm,"should have capture group");
+      replaceAll(cm, query, "$1")
+
+    });
+  }
+
+  function markup2text(cm, all) {
+    
+    if (cm.getOption("readOnly")) return;
+    var query = cm.getSelection() || getSearchState(cm).lastQuery;
+    var dialogText = "typename:"
+    dialog(cm, dialogText + replaceQueryDialog, dialogText, query,function(query) {
+      throw "not implement yet"
+
+    });
+  }  
+
+  CodeMirror.commands.text2markup = text2markup;
+  CodeMirror.commands.markup2text = markup2text;
 });
